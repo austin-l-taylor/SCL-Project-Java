@@ -39,6 +39,9 @@ public class Lexer {
                     case "then":
                         tokens.add(new Token(TokenType.THEN, id));
                         break;
+                    case "display":
+                        tokens.add(new Token(TokenType.DISPLAY, id));
+                        break;
                     default:
                         tokens.add(new Token(TokenType.IDENTIFIER, id));
                         break;
@@ -61,6 +64,9 @@ public class Lexer {
             } else if (currentChar == ')') {
                 tokens.add(new Token(TokenType.RIGHT_PAREN, ")"));
                 i++;
+            }else if (currentChar == '=') {
+                tokens.add(new Token(TokenType.ASSIGN, "="));
+                i++;
             } else {
                 // Ignore whitespace
                 if (Character.isWhitespace(currentChar)) {
@@ -76,10 +82,38 @@ public class Lexer {
         tokens.add(new Token(TokenType.EOS, "EOS"));
     }
 
+    public Token currentToken() {
+        return tokens.get(position-1);
+    }
+
     public Token nextToken() {
         if (position >= tokens.size()) {
             return new Token(TokenType.EOS, "EOS"); // End of Stream token
         }
         return tokens.get(position++);
+    }
+    public Token checkNextToken(){
+        if (position >= tokens.size()) {
+            return new Token(TokenType.EOS, "EOS"); // End of Stream token
+        }
+        int tempPostion = position;
+        Token tempToken = tokens.get(tempPostion);
+        return tempToken;
+    }
+    public Token returnNextToken(){
+        if (position >= tokens.size()) {
+            return new Token(TokenType.EOS, "EOS"); // End of Stream token
+        }
+        int tempPostion = position;
+        Token tempToken = tokens.get(tempPostion);
+        return tempToken;
+    }
+    public Token returnNextNextToken(){
+        if (position >= tokens.size()) {
+            return new Token(TokenType.EOS, "EOS"); // End of Stream token
+        }
+        int tempPostion = position+1;
+        Token tempToken = tokens.get(tempPostion);
+        return tempToken;
     }
 }

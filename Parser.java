@@ -13,7 +13,7 @@ public class Parser {
             Token nextToken;
             switch (token.getType()) {
                 case IDENTIFIER:
-                    nextToken = lexer.nextToken();
+                    nextToken = lexer.checkNextToken();
                     if (nextToken.getType() == TokenType.ASSIGN) {
                         value = parseExpression();
                         block.addStatement(new AssignmentStatement(token.getText(), value));
@@ -62,6 +62,25 @@ public class Parser {
     private Expression parseExpression() {
         // Implement parsing logic for expressions
         // This is a placeholder and should be replaced with actual parsing logic
-        return new ArithmeticExpression(42); // Example value
+        Token exprToken = lexer.currentToken();
+        switch (exprToken.getType()) {
+            case IDENTIFIER:
+                
+                if (lexer.returnNextToken().getType() == TokenType.ASSIGN) {
+                    Token parseToken = lexer.returnNextNextToken();
+                    int value = Integer.parseInt(parseToken.getText());
+                    return new ArithmeticExpression(value);    
+                }               
+                break;
+            case DISPLAY:
+                if (lexer.currentToken().getType() == TokenType.DISPLAY) {
+                    Token parseToken = lexer.returnNextToken();
+                    String display = parseToken.getText();
+                    return new DisplayExpression(display);
+                }
+            default:
+                System.err.println("Unexpected token: " +  lexer.currentToken().getType());
+        }
+        return null;
     }
 }
